@@ -22,7 +22,7 @@
       const dbRef = ref(db, 'log')
 
         function getData() {
-            dbRef.get().then((snapshot) => {
+            get(dbRef).then((snapshot) => {
                 console.log(snapshot.val());
             }).catch((error) => {console.log(error)});
         }
