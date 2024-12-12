@@ -2,8 +2,9 @@
 </head>
 <body>
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-      import {database} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+        import firebase from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+      //import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+      //import {database} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
       // TODO: Add SDKs for Firebase products that you want to use
       // https://firebase.google.com/docs/web/setup#available-libraries
     
@@ -17,9 +18,9 @@
         appId: "1:150230488788:web:69af2da1b4d1f1c035cd41"
       };
     
-      const app = initializeApp(firebaseConfig);
-      const db = database(app);
-      const dbLog = database().ref('log')
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.database(app);
+      const dbLog = firebase.database().ref('log')
 
         function getData() {
             dbRef.get().then((snapshot) => {
