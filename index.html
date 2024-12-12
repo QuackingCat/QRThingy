@@ -1,4 +1,30 @@
-<head></head>
+<head>
+    <script src="https://www.gstatic.com/firebase/9.23.0/firebase-database.js/></script>
+</head>
 <body>
-    meow
+    <script type="module">
+      import { initializeApp, database } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      const firebaseConfig = {
+        apiKey: "AIzaSyBhivS9GuaYUt7xto7XrqV1hkmhfMbV2sU",
+        authDomain: "qrthingy.firebaseapp.com",
+        databaseURL: "https://qrthingy-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "qrthingy",
+        storageBucket: "qrthingy.firebasestorage.app",
+        messagingSenderId: "150230488788",
+        appId: "1:150230488788:web:69af2da1b4d1f1c035cd41"
+      };
+    
+      const app = initializeApp(firebaseConfig);
+      const db = database(app);
+      const dbRef = database().ref()
+
+        function sendData() {
+            dbRef.child('log').get().then(() => {
+                console.log('success')
+            }).catch((error) => {console.log(error)})
+        }
+    </script>
 </body>
