@@ -1,29 +1,152 @@
+<!DOCTYPE html>
+<html lang="he">
+
 <head>
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-      import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
-    
-      const firebaseConfig = {
-        apiKey: "AIzaSyBhivS9GuaYUt7xto7XrqV1hkmhfMbV2sU",
-        authDomain: "qrthingy.firebaseapp.com",
-        databaseURL: "https://qrthingy-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "qrthingy",
-        storageBucket: "qrthingy.firebasestorage.app",
-        messagingSenderId: "150230488788",
-        appId: "1:150230488788:web:69af2da1b4d1f1c035cd41"
-      };
-    
-      const app = initializeApp(firebaseConfig);
-      const db = getDatabase(app);
-      const dbRef = ref(db, 'log')
-      
-      get(dbRef).then((log)=>{
-          
-        document.getElementsByTagName('body')[0].innerHTML = JSON.stringify(log.val())
-      })
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פטרולים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            direction: rtl;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative;
+        }
+
+        th,
+        td {
+            text-align: right;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+
 <body>
+    <header>
+        <h1>מציג פטרולים</h1>
+    </header>
+    <main>
+        <h2>רשומות</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>מיקום (קישור ל Google Maps)</th>
+                        <th>זמן</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Log entries will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhivS9GuaYUt7xto7XrqV1hkmhfMbV2sU",
+            authDomain: "qrthingy.firebaseapp.com",
+            databaseURL: "https://qrthingy-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "qrthingy",
+            storageBucket: "qrthingy.firebasestorage.app",
+            messagingSenderId: "150230488788",
+            appId: "1:150230488788:web:69af2da1b4d1f1c035cd41"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db, 'log')
+
+        get(dbRef).then((logData) => {
+            logData = logData.val()
+            const tbody = document.querySelector('table tbody');
+
+            const sortedEntries = Object.values(logData).sort((a, b) => {
+                const dateA = new Date(a.time.replace(/-/g, '/'));
+                const dateB = new Date(b.time.replace(/-/g, '/'));
+                return dateB - dateA;
+            });
+
+            for (const entry of sortedEntries) {
+                const row = document.createElement('tr');
+
+                const locationCell = document.createElement('td');
+                const locationLink = document.createElement('a');
+                locationLink.textContent = entry.location;
+                locationLink.href = `https://www.google.com/maps?q=${entry.location}`;
+                locationLink.target = '_blank';
+                locationCell.appendChild(locationLink);
+
+                const timeCell = document.createElement('td');
+                timeCell.textContent = entry.time;
+
+                row.appendChild(locationCell);
+                row.appendChild(timeCell);
+                tbody.appendChild(row);
+            }
+        })
+    </script>
 </body>
+
+</html>
