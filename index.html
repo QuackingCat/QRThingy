@@ -1,4 +1,7 @@
 <head>
+    <script>
+        var asd;
+    </script>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
       import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
@@ -28,7 +31,9 @@
         function sendlocation(){
             alert(Geolocation.getCurrentPosition())
         }
+
+        asd = sendlocation
     </script>
 </head>
-<body onload='sendlocation()' >
+<body onload='asd()' >
 </body>
