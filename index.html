@@ -1,6 +1,4 @@
 <head>
-</head>
-<body>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
       import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
@@ -27,6 +25,10 @@
             }).catch((error) => {console.log(error)});
         }
 
-        getData();
+        function sendlocation(){
+            alert(Geolocation.getCurrentPosition())
+        }
     </script>
+</head>
+<body onload='sendlocation()' >
 </body>
