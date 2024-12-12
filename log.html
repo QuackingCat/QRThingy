@@ -20,7 +20,7 @@
       const dbRef = ref(db, 'log')
       
       get(dbRef).then((log)=>{
-        document.getElementsByTagName('body')[0].innerHTML = log.toString()
+        document.getElementsByTagName('body')[0].innerHTML = log.val.toString()
       })
     </script>
 </head>
