@@ -24,7 +24,7 @@
 
         function sendData(loc, time) {
             set(child(dbRef, ""+time.getTime()), {
-                'location': location,
+                'location': loc,
                 'time': time.toLocaleString('isr')
             }).then(() => {
                 console.log('yay');
