@@ -1,2 +1,28 @@
-<head></head>
-<body>asd</body>
+<head>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+      import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      const firebaseConfig = {
+        apiKey: "AIzaSyBhivS9GuaYUt7xto7XrqV1hkmhfMbV2sU",
+        authDomain: "qrthingy.firebaseapp.com",
+        databaseURL: "https://qrthingy-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "qrthingy",
+        storageBucket: "qrthingy.firebasestorage.app",
+        messagingSenderId: "150230488788",
+        appId: "1:150230488788:web:69af2da1b4d1f1c035cd41"
+      };
+    
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const dbRef = ref(db, 'log')
+      
+      get(dbRef).then((log)=>{
+        document.getElementsByTagName('body')[0].innerHTML = log.toString()
+      })
+    </script>
+</head>
+<body>
+</body>
