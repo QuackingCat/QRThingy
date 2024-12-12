@@ -31,9 +31,9 @@
 
         function sendlocation(){
             navigator.geolocation.getCurrentPosition((asd) => {
-                sendData(asd.coords.latitude + ", " + asd.coords.longitude, new Date())
-            }).then(() => {
-                $('body').insertAdjacentHTML("beforeend", "<h1>submitted</h1>")
+                sendData(asd.coords.latitude + ", " + asd.coords.longitude, new Date()).then(() => {
+                    $('body').insertAdjacentHTML("beforeend", "<h1>submitted</h1>")
+                })
             })
         }
 
