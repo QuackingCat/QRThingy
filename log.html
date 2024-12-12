@@ -21,7 +21,7 @@
       
       get(dbRef).then((log)=>{
           
-        document.getElementsByTagName('body')[0].innerHTML = JOSN.stringify(log.val())
+        document.getElementsByTagName('body')[0].innerHTML = JSON.stringify(log.val())
       })
     </script>
 </head>
