@@ -125,36 +125,6 @@
 
         const tbody = document.querySelector('table tbody');
 
-        function fetchdb() {
-            get(dbRef).then((logData) => {
-                logData = logData.val()
-
-                const sortedEntries = Object.values(logData).sort((a, b) => {
-                    const dateA = new Date(a.time.replace(/-/g, '/'));
-                    const dateB = new Date(b.time.replace(/-/g, '/'));
-                    return dateB - dateA;
-                });
-
-                for (const entry of sortedEntries) {
-                    const row = document.createElement('tr');
-
-                    const locationCell = document.createElement('td');
-                    const locationLink = document.createElement('a');
-                    locationLink.textContent = entry.location;
-                    locationLink.href = `https://www.google.com/maps?q=${entry.location}`;
-                    locationLink.target = '_blank';
-                    locationCell.appendChild(locationLink);
-
-                    const timeCell = document.createElement('td');
-                    timeCell.textContent = entry.time;
-
-                    row.appendChild(locationCell);
-                    row.appendChild(timeCell);
-                    tbody.appendChild(row);
-                }
-            })
-        }
-
         onChildAdded(dbRef, (entry) => {
             entry = entry.val()
 
