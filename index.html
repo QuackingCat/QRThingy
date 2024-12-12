@@ -4,7 +4,7 @@
     </script>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-      import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+      import {getDatabase, ref, get, set, child} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
       // TODO: Add SDKs for Firebase products that you want to use
       // https://firebase.google.com/docs/web/setup#available-libraries
     
@@ -22,14 +22,22 @@
       const db = getDatabase(app);
       const dbRef = ref(db, 'log')
 
-        function getData() {
-            get(dbRef).then((snapshot) => {
-                console.log(snapshot.val());
+        function sendData(loc, time) {
+            set(child(dbRef, ""+time.getTime()), {
+                'location': location,
+                'time': time.toLocaleString('isr')
+            }).then(() => {
+                console.log('yay');
             }).catch((error) => {console.log(error)});
         }
 
         function sendlocation(){
-            alert(Geolocation.getCurrentPosition())
+                navigator.geolocation.getCurrentPosition((asd) => {
+                    sendData(asd.coords.latitude + ", " + asd.coords.longitude, new Date())
+                    
+                })
+                
+            }))
         }
 
         asd = sendlocation
