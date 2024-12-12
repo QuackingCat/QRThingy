@@ -21,10 +21,12 @@
       const db = database(app);
       const dbRef = database().ref()
 
-        function sendData() {
+        function getData() {
             dbRef.child('log').get().then(() => {
-                console.log('success')
-            }).catch((error) => {console.log(error)})
+                console.log('success');
+            }).catch((error) => {console.log(error)});
         }
+
+        getdata();
     </script>
 </body>
