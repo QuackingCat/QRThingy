@@ -32,7 +32,7 @@
         function sendlocation(){
             navigator.geolocation.getCurrentPosition((asd) => {
                 sendData(asd.coords.latitude + ", " + asd.coords.longitude, new Date()).then(() => {
-                    document.getElementsByTagName('head')[0].appendChild('<h1>Submitted</h1>')
+                    document.getElementsByTagName('body')[0].innerHTML = '<h1>Submitted</h1>'
                 })
             })
         }
