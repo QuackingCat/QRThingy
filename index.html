@@ -22,18 +22,18 @@
       const db = getDatabase(app);
       const dbRef = ref(db, 'log')
 
-        function sendData(loc, time) {
-            set(child(dbRef, ""+time.getTime()), {
+        async function sendData(loc, time) {
+            await set(child(dbRef, ""+time.getTime()), {
                 'location': loc,
                 'time': `${time.getDate()}-${time.getMonth() + 1}-${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
-            }).then(() => {
-                console.log('yay');
-            }).catch((error) => {console.log(error)});
+            })
         }
 
         function sendlocation(){
             navigator.geolocation.getCurrentPosition((asd) => {
                 sendData(asd.coords.latitude + ", " + asd.coords.longitude, new Date())
+            }).then(() => {
+                $('body').insertAdjacentHTML("beforeend", "<h1>submitted</h1>")
             })
         }
 
