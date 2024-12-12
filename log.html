@@ -100,9 +100,14 @@
             </table>
         </div>
     </main>
+    <script>
+        let app;
+        let db;
+        let dbRef;
+    </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+        import { getDatabase, ref, get, onChildAdded } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
 
         const firebaseConfig = {
             apiKey: "AIzaSyBhivS9GuaYUt7xto7XrqV1hkmhfMbV2sU",
@@ -114,37 +119,60 @@
             appId: "1:150230488788:web:69af2da1b4d1f1c035cd41"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const dbRef = ref(db, 'log')
+        app = initializeApp(firebaseConfig);
+        db = getDatabase(app);
+        dbRef = ref(db, 'log')
 
-        get(dbRef).then((logData) => {
-            logData = logData.val()
-            const tbody = document.querySelector('table tbody');
+        const tbody = document.querySelector('table tbody');
 
-            const sortedEntries = Object.values(logData).sort((a, b) => {
-                const dateA = new Date(a.time.replace(/-/g, '/'));
-                const dateB = new Date(b.time.replace(/-/g, '/'));
-                return dateB - dateA;
-            });
+        function fetchdb() {
+            get(dbRef).then((logData) => {
+                logData = logData.val()
 
-            for (const entry of sortedEntries) {
-                const row = document.createElement('tr');
+                const sortedEntries = Object.values(logData).sort((a, b) => {
+                    const dateA = new Date(a.time.replace(/-/g, '/'));
+                    const dateB = new Date(b.time.replace(/-/g, '/'));
+                    return dateB - dateA;
+                });
 
-                const locationCell = document.createElement('td');
-                const locationLink = document.createElement('a');
-                locationLink.textContent = entry.location;
-                locationLink.href = `https://www.google.com/maps?q=${entry.location}`;
-                locationLink.target = '_blank';
-                locationCell.appendChild(locationLink);
+                for (const entry of sortedEntries) {
+                    const row = document.createElement('tr');
 
-                const timeCell = document.createElement('td');
-                timeCell.textContent = entry.time;
+                    const locationCell = document.createElement('td');
+                    const locationLink = document.createElement('a');
+                    locationLink.textContent = entry.location;
+                    locationLink.href = `https://www.google.com/maps?q=${entry.location}`;
+                    locationLink.target = '_blank';
+                    locationCell.appendChild(locationLink);
 
-                row.appendChild(locationCell);
-                row.appendChild(timeCell);
-                tbody.appendChild(row);
-            }
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = entry.time;
+
+                    row.appendChild(locationCell);
+                    row.appendChild(timeCell);
+                    tbody.appendChild(row);
+                }
+            })
+        }
+
+        onChildAdded(dbRef, (entry) => {
+            entry = entry.val()
+
+            const row = document.createElement('tr');
+
+            const locationCell = document.createElement('td');
+            const locationLink = document.createElement('a');
+            locationLink.textContent = entry.location;
+            locationLink.href = `https://www.google.com/maps?q=${entry.location}`;
+            locationLink.target = '_blank';
+            locationCell.appendChild(locationLink);
+
+            const timeCell = document.createElement('td');
+            timeCell.textContent = entry.time;
+
+            row.appendChild(locationCell);
+            row.appendChild(timeCell);
+            tbody.prepend(row);
         })
     </script>
 </body>
