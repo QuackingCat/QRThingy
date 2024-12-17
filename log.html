@@ -108,6 +108,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
         import { getDatabase, ref, get, onChildAdded } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"
+
 
         const firebaseConfig = {
             apiKey: "AIzaSyBhivS9GuaYUt7xto7XrqV1hkmhfMbV2sU",
@@ -120,30 +122,58 @@
         };
 
         app = initializeApp(firebaseConfig);
-        db = getDatabase(app);
-        dbRef = ref(db, 'log')
+        let auth = getAuth()
 
-        const tbody = document.querySelector('table tbody');
+        onAuthStateChanged(auth, function (user) {
+            if (user) {
+                console.log(JSON.stringify(user));
 
-        onChildAdded(dbRef, (entry) => {
-            entry = entry.val()
+                db = getDatabase(app);
+                dbRef = ref(db, 'log')
 
-            const row = document.createElement('tr');
+                const tbody = document.querySelector('table tbody');
 
-            const locationCell = document.createElement('td');
-            const locationLink = document.createElement('a');
-            locationLink.textContent = entry.location;
-            locationLink.href = `https://www.google.com/maps?q=${entry.location}`;
-            locationLink.target = '_blank';
-            locationCell.appendChild(locationLink);
+                onChildAdded(dbRef, (entry) => {
+                    entry = entry.val()
 
-            const timeCell = document.createElement('td');
-            timeCell.textContent = entry.time;
+                    const row = document.createElement('tr');
 
-            row.appendChild(locationCell);
-            row.appendChild(timeCell);
-            tbody.prepend(row);
-        })
+                    const locationCell = document.createElement('td');
+                    const locationLink = document.createElement('a');
+                    locationLink.textContent = entry.location;
+                    locationLink.href = `https://www.google.com/maps?q=${entry.location}`;
+                    locationLink.target = '_blank';
+                    locationCell.appendChild(locationLink);
+
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = entry.time;
+
+                    row.appendChild(locationCell);
+                    row.appendChild(timeCell);
+                    tbody.prepend(row);
+                })
+            } else {
+                signin()
+            }
+        });
+
+        function signin() {
+            let pass = prompt("הכנס את הסיסמה")
+            signInWithEmailAndPassword(auth, 'user@somefictionaldomain.meow', pass)
+                .then(() => { pass = ""; })
+                .catch(function (error) {
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    if (errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-credential') {
+                        alert('Wrong password.');
+                        signin()
+                    } else {
+                        alert("תקלה במהלך ההתחברות:\n" + errorMessage);
+                    }
+                    console.log(error);
+                });
+        }
     </script>
 </body>
 
